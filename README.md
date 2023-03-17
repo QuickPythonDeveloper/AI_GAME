@@ -80,8 +80,7 @@ or <a href= https://riptutorial.com/tkinter/example/3206/installation-or-setup>t
 # Client
 
 - You can use `'client_main.py'` to develop your AI code. Your code should be placed on the `'do_turn'` function.
-- You can change IP and Port of server in `'client_config.json'` 
-
+- You can change IP and Port of server in `'client_config.json'`
 
 # Screen shots
 
@@ -89,7 +88,7 @@ or <a href= https://riptutorial.com/tkinter/example/3206/installation-or-setup>t
 
 ![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.17.06.jpeg)
 ---
-02 
+02
 
 ![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.17.14.jpeg)
 ---
