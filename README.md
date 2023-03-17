@@ -83,4 +83,30 @@ or <a href= https://riptutorial.com/tkinter/example/3206/installation-or-setup>t
 - You can change IP and Port of server in `'client_config.json'` 
 
 
+# Screen shots
+
+01
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.17.06.jpeg)
+---
+02 
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.17.14.jpeg)
+---
+03
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.17.19.jpeg)
+---
+04
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.23.05.jpeg)
+---
+05
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.23.09%20(1).jpeg)
+---
+06
+
+![image](https://github.com/QuickPythonDeveloper/AI_GAME/blob/main/images/Screen%20Shot%201401-12-22%20at%2023.23.15.jpeg)
+
 
