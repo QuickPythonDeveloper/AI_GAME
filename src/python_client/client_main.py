@@ -2,15 +2,14 @@ import datetime
 
 from base import BaseAgent, Action
 from model_based_policy import ModelBasedPolicy
+from reinforce_learning import ReinforceLearning
 
 
 class Agent(BaseAgent):
     # actions = [Action.RIGHT] + [Action.TELEPORT] * 100
     def do_turn(self) -> Action:
         now1 = datetime.datetime.now()
-        phase3 = ModelBasedPolicy(self)
-        # print(self.agent_scores)
-        # phase3 = ReinforceLearning(self)
+        phase3 = ReinforceLearning(self)
         action = phase3.main()
         now2 = datetime.datetime.now()
         print(f'total_seconds: {(now2 - now1).total_seconds()}')
