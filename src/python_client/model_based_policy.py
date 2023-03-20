@@ -93,7 +93,6 @@ class ModelBasedPolicy:
             if len(agent[0]) != 0:
                 agent_index = np.vstack((agent_index, [row, agent[0][0]]))
             agent = np.where(self.map[row] == 'TA')
-            # it means agent in teleport
             if len(agent[0]) != 0:
                 agent_index = np.vstack((agent_index, [row, agent[0][0]]))
             agent = np.where(self.map[row] == 'YA')
@@ -108,7 +107,6 @@ class ModelBasedPolicy:
             agent = np.where(self.map[row] == '*A')
             if len(agent[0]) != 0:
                 agent_index = np.vstack((agent_index, [row, agent[0][0]]))
-        # print(agent_index)
         return [agent_index[0][0], agent_index[0][1]]
 
     def calc_reward(self, index) -> float:
@@ -127,13 +125,10 @@ class ModelBasedPolicy:
             reward += self.calc_gems_scores('4', self.agent.prev_gem)
         elif self.map[i_index][j_index] == 'G':
             reward -= 500
-            # todo
         elif self.map[i_index][j_index] == 'R':
             reward -= 500
-            # todo
         elif self.map[i_index][j_index] == 'Y':
             reward -= 500
-            # todo
         elif self.map[i_index][j_index] == 'g':
             reward += 10
         elif self.map[i_index][j_index] == 'r':
@@ -236,14 +231,9 @@ class ModelBasedPolicy:
                         total_probs.append(total_prob)
                     self.value_map[i][j] = self.calc_reward((i, j)) + self.gamma * max(total_probs)
                     delta = max(delta, abs(temp - self.value_map[i][j]))
-            # print("delta : ", delta)
             now2 = datetime.datetime.now()
             if (now2 - now1).total_seconds() > 0.9 or delta < self.threshold:
                 converge = True
-        print("value_map : ", self.value_map)
-        # print("map : ", self.map)
-        # if delta < self.threshold:
-        #     converge = True
 
     def find_optimal_policy(self):
         (i_agent, j_agent) = self.get_agent_index()
@@ -257,7 +247,6 @@ class ModelBasedPolicy:
                     list.append((count, -1000000))
                 count += 1
         list.sort(key=lambda a: a[1], reverse=True)
-        # print("policy : ", list) todo remove comment
         return list[0][0]
 
     def perform_action(self, action: int):
@@ -300,14 +289,7 @@ class ModelBasedPolicy:
             self.agent.prev_gem = current_cell
 
     def main(self):
-        print("prev gem :", self.agent.prev_gem)
-        print(self.map)
-        # print(self.value_map)
         self.agent.list.append(self.agent.agent_gems[0])
-        # print("prev gem :", self.agent.list)
         self.value_iteration()
         action = self.find_optimal_policy()
         return self.perform_action(action)
-        # return random.choice(
-        #     [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT, Action.DOWN_RIGHT, Action.DOWN_LEFT, Action.UP_LEFT,
-        #      Action.UP_RIGHT, Action.NOOP])

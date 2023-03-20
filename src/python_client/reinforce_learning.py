@@ -85,8 +85,6 @@ class ReinforceLearning(ModelBasedPolicy):
             self_reward = prob * self.calc_reward(destination)
 
         return [prob, self_reward]
-        # i, j = destination
-        # return {'index': (i, j), 'prob': prob, 'self': self_reward, 'children': []}
 
     def calc_forbidden_actions(self, i, j) -> list:
         forb_actions = []
