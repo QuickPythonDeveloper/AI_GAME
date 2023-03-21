@@ -374,3 +374,49 @@ class MiniMax:
                     self.agent_B_score += 1
 
             return best
+
+    @staticmethod
+    def perform_action(self, action: str):
+        if action == 'UP':
+            return Action.UP
+
+        elif action == 'DOWN':
+            return Action.DOWN
+
+        elif action == 'LEFT':
+            return Action.LEFT
+
+        elif action == 'RIGHT':
+            return Action.RIGHT
+
+        elif action == 'DOWN_RIGHT':
+            return Action.DOWN_RIGHT
+
+        elif action == 'DOWN_LEFT':
+            return Action.DOWN_LEFT
+
+        elif action == 'UP_LEFT':
+            return Action.UP_LEFT
+
+        elif action == 'UP_RIGHT':
+            return Action.UP_RIGHT
+        elif action == 'NOOP':
+            return Action.NOOP
+
+    def heuristic(self) -> int:
+        """
+        Calculates score of the terminal state
+        """
+
+        for row in range(self.height):
+            for col in range(self.width):
+                listA = re.findall(f'[A][1-4]', self.map[row][col])
+                self.agent_A_score += len(listA)
+                listAB = re.findall(f'[B][1-4]', self.map[row][col])
+                self.agent_B_score += len(listAB)
+                # if self.map[row][col] == "1":
+        return self.agent_A_score - self.agent_B_score
+
+    def main(self):
+        action = self.find_best_action()
+        return self.perform_action(action)
