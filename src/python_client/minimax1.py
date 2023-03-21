@@ -1,9 +1,11 @@
 from base import Action
-from utils.config import GEMS
 import numpy as np
+from typing import Union
 import re
 import datetime
 import warnings
+
+from utils.config import GEMS
 
 
 class MiniMax:
@@ -36,25 +38,23 @@ class MiniMax:
 
     def make_barbed_indexes(self) -> list:
         barbed_indexes = []  # row, col
-        for row in range(self.map.shape[0]):
-            for row in range(self.height):
-                for col in range(self.width):
-                    if self.map[row][col] == "*":
-                        barbed_indexes.append((row, col))
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.map[row][col] == "*":
+                    barbed_indexes.append((row, col))
         return barbed_indexes
 
     def make_door_indexes(self) -> list:
         door_indexes = []  # row, col
 
-        for row in range(self.map.shape[0]):
-            for row in range(self.height):
-                for col in range(self.width):
-                    if self.map[row][col] == "R":
-                        door_indexes.append((row, col))
-                    if self.map[row][col] == "G":
-                        door_indexes.append((row, col))
-                    if self.map[row][col] == "Y":
-                        door_indexes.append((row, col))
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.map[row][col] == "R":
+                    door_indexes.append((row, col))
+                if self.map[row][col] == "G":
+                    door_indexes.append((row, col))
+                if self.map[row][col] == "Y":
+                    door_indexes.append((row, col))
         return door_indexes
 
     def make_key_indexes(self) -> list:
@@ -150,8 +150,8 @@ class MiniMax:
             else:
                 return 50
 
-    def transition_model(self, action, state) -> tuple:
-        # return None for imposible action and wall
+    def transition_model(self, action, state) -> Union[tuple, None]:
+        # return None for impossible action and wall
         # print(state)
         (i, j) = state
         next_state = ()
@@ -198,18 +198,12 @@ class MiniMax:
                 return None
         elif action == 'NOOP':
             next_state = (i, j)
-        # i = self.get_agent_index('B')[0]
-        # j = self.get_agent_index('B')[1]
-        # if next_state == (i,j):
-        #     return None
+
         warnings.simplefilter(action='ignore', category=FutureWarning)
-        if next_state not in self.agent.wall_indexes:
-            if next_state not in self.agent.door_indexes:
-                return next_state
-            else:
-                return None
-        else:
-            return None
+        if next_state not in self.agent.wall_indexes and next_state not in self.agent.door_indexes:
+            return next_state
+
+        return None
 
     def is_action_left(self, state, max_turn):
         if max_turn:
@@ -217,13 +211,12 @@ class MiniMax:
                 if self.transition_model(act, state) is not None and self.transition_model(act,
                                                                                            state) not in self.visited_indexes_A:
                     return True
-            return False
         else:
             for act in self.actions:
                 if self.transition_model(act, state) is not None and self.transition_model(act,
                                                                                            state) not in self.visited_indexes_B:
                     return True
-            return False
+        return False
 
     def is_terminal(self, state, max_turn) -> bool:
         self.agent.gem_indexes = self.make_gem_indexes()
@@ -232,10 +225,6 @@ class MiniMax:
         if self.is_action_left(state, max_turn):
             return False
         return True
-        # if state_A == (1, 2) or state_B == (1, 2):
-        #     return True
-        # else:
-        #     return False
 
     def is_agent_nearby_gem(self, state):
         flag = False
@@ -244,7 +233,7 @@ class MiniMax:
             if self.transition_model(act, state) is not None:
                 next_state = self.transition_model(act, state)
                 (i, j) = next_state
-                if ((i, j) in self.agent.gem_indexes):
+                if (i, j) in self.agent.gem_indexes:
                     flag = True
                     action = act
         return flag, action
@@ -254,14 +243,14 @@ class MiniMax:
         best_action = 'NOOP'
         i = self.get_agent_index('A')[0]
         j = self.get_agent_index('A')[1]
-        state_A = (i, j)
-        init_state = state_A
+        state_a = (i, j)
+        init_state = state_a
         i = self.get_agent_index('B')[0]
         j = self.get_agent_index('B')[1]
-        if self.is_terminal(state_A, True):
+        if self.is_terminal(state_a, True):
             return 'NOOP'
-        state_B = (i, j)
-        flag, action = self.is_agent_nearby_gem(state_A)
+        state_b = (i, j)
+        flag, action = self.is_agent_nearby_gem(state_a)
         if flag:
             return action
         max_turn = False
@@ -271,10 +260,10 @@ class MiniMax:
             self.agent_B_score = 0
 
             if self.transition_model(action, init_state) is not None:
-                state_A = self.transition_model(action, init_state)
-                (i, j) = state_A
+                state_a = self.transition_model(action, init_state)
+                (i, j) = state_a
                 self.agent.gem_indexes = self.make_gem_indexes()
-                if ((i, j) in self.agent.gem_indexes):
+                if (i, j) in self.agent.gem_indexes:
                     self.map[i][j] = f'A{self.map[i][j]}'
                     self.agent_A_score += 1000
                 self.agent_A_score += -1
@@ -282,101 +271,88 @@ class MiniMax:
                 self.visited_indexes_B = []
                 print('start :', init_state)
                 print('action :', action)
-                score = self.minimax(state_A, state_B, max_turn)
+                score = self.minimax(state_a, state_b, max_turn)
                 # print("list a :" , self.visited_indexes_A)
                 # print("list b :", self.visited_indexes_B)
                 self.map[i][j] = np.array(self.agent.grid)[i][j]
                 self.agent.gem_indexes = self.make_gem_indexes()
-                if ((i, j) in self.agent.gem_indexes):
+                if (i, j) in self.agent.gem_indexes:
                     self.agent_A_score += -1000
                 self.agent_A_score += 1
                 print('score : ', score)
-                print(init_state, action, state_A, state_B, max_turn)
+                print(init_state, action, state_a, state_b, max_turn)
                 print('------------------------------------------------------')
-                if (score > best_score):
+                if score > best_score:
                     best_action = action
                     best_score = score
         print("act : ", best_action)
         return best_action
 
-    def minimax(self, state_A, state_B, max_turn) -> int:
+    def minimax(self, state_a, state_b, max_turn) -> int:
         """"
         Main function
         """
         # cutoff test
-        self.now2 = datetime.datetime.now()
-        if ((self.now2 - self.now1).total_seconds() > 0.9):
+        now2 = datetime.datetime.now()
+        if (now2 - self.now1).total_seconds() > 0.9:
             print("cutoff test", len(self.visited_indexes_A))
             return self.heuristic()
-        if (max_turn):
-            if self.is_terminal(state_A, max_turn):
-                # print("h :",self.heuristic())
-                # print(self.map)
-
+        if max_turn:
+            if self.is_terminal(state_a, max_turn):
                 return self.heuristic()
         else:
-            if self.is_terminal(state_B, max_turn):
-                # print("h :",self.heuristic())
+            if self.is_terminal(state_b, max_turn):
                 return self.heuristic()
-        # print("father : " , state_A)
         if max_turn:
             best = -1000
-            self.visited_indexes_A.append(state_A)
-            init_state = state_A
+            self.visited_indexes_A.append(state_a)
+            init_state = state_a
             for act in self.actions:
                 if self.transition_model(act, init_state) is not None and self.transition_model(act,
                                                                                                 init_state) not in self.visited_indexes_A:
-                    state_A = self.transition_model(act, init_state)
-                    (i, j) = state_A
+                    state_a = self.transition_model(act, init_state)
+                    (i, j) = state_a
                     self.agent.gem_indexes = self.make_gem_indexes()
-                    if ((i, j) in self.agent.gem_indexes):
+                    if (i, j) in self.agent.gem_indexes:
                         self.map[i][j] = f'A{self.map[i][j]}'
                         self.agent_A_score += 1000
-                    # elif ((i, j) in self.agent.barbed_indexes):
-                    #     self.agent_A_score += -20
-                    # elif ((i, j) in self.agent.key_indexes):
-                    #     self.agent_A_score += 20
+
                     self.agent_A_score += -1
-                    # print("child : " , state_A)
-                    # print("best before max:",best)
-                    best = max(best, self.minimax(state_A, state_B, not max_turn))
+
+                    best = max(best, self.minimax(state_a, state_b, not max_turn))
                     self.map[i][j] = np.array(self.agent.grid)[i][j]
                     self.agent.gem_indexes = self.make_gem_indexes()
-                    if ((i, j) in self.agent.gem_indexes):
+                    if (i, j) in self.agent.gem_indexes:
                         self.agent_A_score += -1000
-                    # elif ((i, j) in self.agent.barbed_indexes):
-                    #     self.agent_A_score += 20
-                    # elif ((i, j) in self.agent.key_indexes):
-                    #     self.agent_A_score += -20
+
                     self.agent_A_score += 1
-                    # print("best after max:",best)
-            # print("best : " ,best)
+
             return best
         else:
             best = 1000
-            self.visited_indexes_B.append(state_B)
-            init_state = state_B
+            self.visited_indexes_B.append(state_b)
+            init_state = state_b
             for act in self.actions:
                 if self.transition_model(act, init_state) is not None and self.transition_model(act,
                                                                                                 init_state) not in self.visited_indexes_B:
-                    state_B = self.transition_model(act, init_state)
-                    (i, j) = state_B
+                    state_b = self.transition_model(act, init_state)
+                    (i, j) = state_b
                     self.agent.gem_indexes = self.make_gem_indexes()
-                    if ((i, j) in self.agent.gem_indexes):
+                    if (i, j) in self.agent.gem_indexes:
                         self.map[i][j] = f'B{self.map[i][j]}'
                         self.agent_B_score += 1000
                     self.agent_B_score += -1
-                    best = min(best, self.minimax(state_A, state_B, not max_turn))
+                    best = min(best, self.minimax(state_a, state_b, not max_turn))
                     self.map[i][j] = np.array(self.agent.grid)[i][j]
                     self.agent.gem_indexes = self.make_gem_indexes()
-                    if ((i, j) in self.agent.gem_indexes):
+                    if (i, j) in self.agent.gem_indexes:
                         self.agent_B_score += -1000
                     self.agent_B_score += 1
 
             return best
 
     @staticmethod
-    def perform_action(self, action: str):
+    def perform_action(action: str):
         if action == 'UP':
             return Action.UP
 
@@ -410,10 +386,10 @@ class MiniMax:
 
         for row in range(self.height):
             for col in range(self.width):
-                listA = re.findall(f'[A][1-4]', self.map[row][col])
-                self.agent_A_score += len(listA)
-                listAB = re.findall(f'[B][1-4]', self.map[row][col])
-                self.agent_B_score += len(listAB)
+                list_a = re.findall(f'[A][1-4]', self.map[row][col])
+                self.agent_A_score += len(list_a)
+                list_a_b = re.findall(f'[B][1-4]', self.map[row][col])
+                self.agent_B_score += len(list_a_b)
                 # if self.map[row][col] == "1":
         return self.agent_A_score - self.agent_B_score
 
