@@ -8,7 +8,7 @@ import warnings
 from utils.config import GEMS
 
 
-class MiniMax:
+class MiniMax1:
     def __init__(self, agent):
         self.agent = agent
         self.map = np.array(self.agent.grid)
