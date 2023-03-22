@@ -18,18 +18,18 @@ class ModelBasedPolicy:
         self.barbed = ['*', '*A']
         self.slider = ['1', '2', '3', '4', 'g', 'r', 'y']
         self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "DOWN_RIGHT", "DOWN_LEFT", "UP_LEFT", "UP_RIGHT", "NOOP"]
-        if 'list' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'list'):
             self.agent.list = []
-        if 'keys' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'keys'):
             self.agent.keys = {'r': 0,
                                'y': 0,
                                'g': 0}
-        if 'prev_gem' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'prev_gem'):
             self.agent.prev_gem = None
 
         self.agent.agent_index = self.get_agent_index()
 
-        if 'prev_map' in self.agent.__dict__:
+        if hasattr(self.agent, 'prev_map'):
             self.calc_keys_count()
             self.calc_prev_gem()
 

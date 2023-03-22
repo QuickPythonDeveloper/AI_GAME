@@ -18,13 +18,13 @@ class ReinforceLearning(ModelBasedPolicy):
         self.gamma = 0.95
         self.Q = np.zeros((self.height * self.width, len(self.actions)))
         self.reward = 0
-        if 'action1' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'action1'):
             self.agent.action1 = None
-        if 'action2' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'action2'):
             self.agent.action2 = None
-        if 'state1' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'state1'):
             self.agent.state1 = self.agent.agent_index
-        if 'state2' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'state2'):
             self.agent.state2 = self.agent.agent_index
 
     def make_state_num(self, state: tuple):

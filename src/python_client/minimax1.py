@@ -14,13 +14,13 @@ class MiniMax:
         self.map = np.array(self.agent.grid)
         self.height = self.agent.grid_height
         self.width = self.agent.grid_width
-        if 'wall_indexes' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'wall_indexes'):
             self.agent.wall_indexes = self.make_wall_indexes()
-        if 'barbed_indexes' not in self.agent.__dict__:  # int
+        if not hasattr(self.agent, 'barbed_indexes'):
             self.agent.barbed_indexes = self.make_barbed_indexes()
-        if 'key_indexes' not in self.agent.__dict__:  # str
+        if not hasattr(self.agent, 'key_indexes'):
             self.agent.key_indexes = self.make_key_indexes()
-        if 'door_indexes' not in self.agent.__dict__:  # str
+        if not hasattr(self.agent, 'door_indexes'):
             self.agent.door_indexes = self.make_door_indexes()
         self.agent.gem_indexes = self.make_gem_indexes()
         self.gem = ['1', '2', '3', '4']
@@ -31,7 +31,7 @@ class MiniMax:
         self.visited_indexes_B = []
         self.agent_A_score = 0
         self.agent_B_score = 0
-        if 'keys' not in self.agent.__dict__:
+        if not hasattr(self.agent, 'keys'):
             self.agent.keys = {'r': 0,
                                'y': 0,
                                'g': 0}
