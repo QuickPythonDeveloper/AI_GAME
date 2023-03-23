@@ -35,8 +35,8 @@ class ModelBasedPolicy:
 
         self.agent.prev_map = self.map
 
-    @classmethod
-    def calc_gems_scores(cls, gem: str, prev_gem: str) -> int:
+    @staticmethod
+    def calc_gems_scores(gem: str, prev_gem: str) -> int:
         if prev_gem is None:
             if gem == GEMS['YELLOW_GEM']:
                 return 50
